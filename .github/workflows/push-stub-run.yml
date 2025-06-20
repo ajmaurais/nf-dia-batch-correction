@@ -1,0 +1,28 @@
+name: Nextflow Stub Runs
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ '**' ]
+
+jobs:
+  stub-run:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        config: [
+          'test_mixed_metadata.config'
+        ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Run (${{ matrix.config }})
+      run: |
+        echo "Installing Nextflow:"
+        curl -s https://get.nextflow.io | bash
+        chmod +x nextflow
+        echo "Running Nextflow stub with config: ${{ matrix.config }}"
+        ./nextflow run . -stub-run -profile standard -c test_resources/${{ matrix.config }}
