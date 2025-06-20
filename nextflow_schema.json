@@ -25,12 +25,14 @@
     "precursor_report_template": {
       "type": "string",
       "default": "https://raw.githubusercontent.com/uw-maccosslab/nf-dia-batch-correction/master/resources/precursor_quality.skyr",
-      "description": "URL template for precursor quality report."
+      "description": "URL template for precursor quality report.",
+      "hidden": true
     },
     "replicate_report_template": {
       "type": "string",
       "default": "https://raw.githubusercontent.com/uw-maccosslab/nf-dia-batch-correction/master/resources/replicate_quality.skyr",
-      "description": "URL template for replicate quality report."
+      "description": "URL template for replicate quality report.",
+      "hidden": true
     },
     "panorama": {
       "type": "object",
@@ -206,16 +208,22 @@
     "images": {
       "type": "object",
       "properties": {
-        "linux": { "type": "string" },
-        "panorama_client": { "type": "string" },
-        "proteowizard": { "type": "string" },
-        "batch_report": { "type": "string" }
-      },
-      "default": {
-        "linux": "quay.io/mauraisa/aws_bash:latest",
-        "panorama_client": "quay.io/protio/panorama-client:1.1.0",
-        "proteowizard": "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:3.0.24284-bc93c28",
-        "batch_report": "quay.io/mauraisa/dia_qc_report:2.5.0"
+        "linux": {
+          "type": "string",
+          "default": "quay.io/mauraisa/aws_bash:latest"
+        },
+        "panorama_client": {
+          "type": "string",
+          "default": "quay.io/protio/panorama-client:1.1.0"
+        },
+        "proteowizard": {
+          "type": "string",
+          "default": "quay.io/mauraisa/pwiz-skyline-i-agree-to-the-vendor-licenses:skyline_daily_25.0.9.97-ae4c997"
+        },
+        "batch_report": {
+          "type": "string",
+          "default": "quay.io/mauraisa/dia_qc_report:2.5.0"
+        }
       },
       "additionalProperties": false,
       "hidden": true
