@@ -11,34 +11,44 @@ def format_flags(vars, flag) {
     return format_flag(vars, flag)
 }
 
-process NORMALIZE_DB {
+process FILTER_IMPUTE_NORMALIZE {
     publishDir "${params.result_dir}/normalize_db", failOnError: true, mode: 'copy'
     label 'process_high_memory'
     container params.images.batch_report
-    stageInMode 'copy'
+    stageInMode 'copy' // The input file is modified in place. Copying is necissary to avoid problems with caching.
 
     input:
         path batch_db
 
     output:
-        path("${batch_db.baseName}.db3"), emit: normalized_db
+        path("${batch_db.name}"), emit: final_db
         path("*.stdout"), emit: stdout
         path("*.stderr"), emit: stderr
 
     script:
         """
-        dia_qc normalize \
-            ${format_flag(params.normalize_db.method, "--method")} \
+        if ${params.normalize_db.exclude_projects != null || params.normalize_db.exclude_replicates != null ? 'true' : 'false'} ; then
+            dia_qc filter \
             ${format_flags(params.normalize_db.exclude_replicates, "--excludeRep")} \
             ${format_flags(params.normalize_db.exclude_projects, "--excludeProject")} \
-            "${batch_db}" \
-            > >(tee "normalize_db.stdout") 2> >(tee "normalize_db.stderr" >&2)
+            ${batch_db} \
+            > >(tee "filter_db.stdout") 2> >(tee "filter_db.stderr" >&2)
+        fi
+
+        if ${params.imputation.imputation_method == null ? 'false' : 'true'} ; then
+            dia_qc impute -m=${params.imputation.imputation_method} ${batch_db} \
+                > >(tee "impute_db.stdout") 2> >(tee "impute_db.stderr" >&2)
+        fi
+
+        if ${params.normalize_db.method == null ? 'false' : 'true'} ; then
+            dia_qc normalize -m=${params.normalize_db.normalization_method} ${batch_db} \
+                > >(tee "normalize_db.stdout") 2> >(tee "normalize_db.stderr" >&2)
+        fi
         """
 
     stub:
         """
-        touch "normalized_${batch_db.baseName}.db3"
-        touch stub.stdout stub.stderr
+        touch ${batch_db} normalize_impute.stderr normalize_impute.stdout
         """
 }
 
