@@ -9,7 +9,11 @@ include { batch_correction } from "./workflows/batch_correction.nf"
 include { GET_AWS_USER_ID } from "./modules/aws"
 include { BUILD_AWS_SECRETS } from "./modules/aws"
 
+include { validateParameters } from 'plugin/nf-schema'
+
 workflow {
+    // Validate pipeline parameters
+    validateParameters()
 
     // if accessing panoramaweb and running on aws, set up an aws secret
     if(workflow.profile == 'aws' && is_panorama_used()) {
