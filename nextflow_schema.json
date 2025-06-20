@@ -57,13 +57,17 @@
       "properties": {
         "exclude_replicates": {
           "type": ["array", "null"],
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": null,
           "description": "List of replicates to exclude from normalization and batch correction"
         },
         "exclude_projects": {
           "type": ["array", "null"],
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "default": null,
           "description": "List of Skyline documents to exclude from normalization and batch correction"
         },
@@ -78,30 +82,95 @@
     "bc": {
       "type": "object",
       "properties": {
-        "method": { "type": "string", "default": "combat", "description": "Batch correction method" },
-        "batch1": { "type": ["string", "null"], "default": null, "description": "Metadata key corresponding to batch level 1. If null, the project name is used as the batch variable" },
-        "batch2": { "type": ["string", "null"], "default": null, "description": "Metadata key corresponding to batch level 2. If null, the project name is used as the batch variable" },
-        "color_vars": { "type": ["string", "array", "null"], "items": { "type": "string" }, "default": null, "description": "Metadata key(s) used to color PCA plots. Can be either string or list. If null, batch and acquisition number are used to color plots." },
-        "covariate_vars": { "type": ["string", "array", "null"], "items": { "type": "string" }, "default": null, "description": "Metadata key(s) to use as covariates for batch correction. Can be either string or list. If null, no covariates are used." },
-        "control_key": { "type": ["string", "null"], "default": null, "description": "Metadata key indicating replicates which are controls for CV plots. If null, all replicates are used in CV distribution plot." },
-        "control_values": { "type": ["array", "null"], "items": { "type": "string" }, "default": null, "description": "Metadata value(s) mapping to control_key indicating whether a replicate is a control." },
-        "plot_ext": { "type": ["string", "null"], "default": null, "description": "File extension for standalone plots. If null, no standalone plots are produced." }
+        "method": {
+          "type": "string",
+          "default": "combat",
+          "description": "Batch correction method"
+        },
+        "batch1": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Metadata key corresponding to batch level 1. If null, the project name is used as the batch variable"
+        },
+        "batch2": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Metadata key corresponding to batch level 2. If null, the project name is used as the batch variable"
+        },
+        "color_vars": {
+          "type": ["string", "array", "null"],
+          "items": {
+            "type": "string"
+          },
+          "default": null,
+          "description": "Metadata key(s) used to color PCA plots. Can be either string or list. If null, batch and acquisition number are used to color plots."
+        },
+        "covariate_vars": {
+          "type": ["string", "array", "null"],
+          "items": {
+            "type": "string"
+          },
+          "default": null,
+          "description": "Metadata key(s) to use as covariates for batch correction. Can be either string or list. If null, no covariates are used."
+        },
+        "control_key": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "Metadata key indicating replicates which are controls for CV plots. If null, all replicates are used in CV distribution plot."
+        },
+        "control_values": {
+          "type": ["array", "null"],
+          "items": {
+            "type": "string"
+          },
+          "default": null,
+          "description": "Metadata value(s) mapping to control_key indicating whether a replicate is a control."
+        },
+        "plot_ext": {
+          "type": ["string", "null"],
+          "default": null,
+          "description": "File extension for standalone plots. If null, no standalone plots are produced."
+        }
       }
     },
     "aws": {
       "type": "object",
       "properties": {
-        "region": { "type": "string", "default": "us-west-2" },
+        "region": {
+          "type": "string",
+          "default": "us-west-2"
+        },
         "batch": {
           "type": "object",
           "properties": {
-            "cliPath": { "type": "string", "default": "/usr/local/aws-cli/v2/current/bin/aws" },
-            "logsGroup": { "type": "string", "default": "/batch/tei-nextflow-batch" },
-            "maxConnections": { "type": "integer", "default": 20 },
-            "connectionTimeout": { "type": "integer", "default": 10000 },
-            "uploadStorageClass": { "type": "string", "default": "INTELLIGENT_TIERING" },
-            "storageEncryption": { "type": "string", "default": "AES256" },
-            "retryMode": { "type": "string", "default": "standard" }
+            "cliPath": {
+              "type": "string",
+              "default": "/usr/local/aws-cli/v2/current/bin/aws"
+            },
+            "logsGroup": {
+              "type": "string",
+              "default": "/batch/tei-nextflow-batch"
+            },
+            "maxConnections": {
+              "type": "integer",
+              "default": 20
+            },
+            "connectionTimeout": {
+              "type": "integer",
+              "default": 10000
+            },
+            "uploadStorageClass": {
+              "type": "string",
+              "default": "INTELLIGENT_TIERING"
+            },
+            "storageEncryption": {
+              "type": "string",
+              "default": "AES256"
+            },
+            "retryMode": {
+              "type": "string",
+              "default": "standard"
+            }
           }
         }
       }
@@ -111,17 +180,45 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
-          "skyline": { "type": "string" },
-          "metadata": { "type": "string" }
+          "skyline": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "string"
+          }
         },
         "required": ["skyline"]
       },
       "description": "A map of Skyline documents and metadata files; file paths can be local file paths or Panorama WebDav URLs"
     },
-    "replicate_metadata": {
-      "type": ["string", "null"],
-      "default": null,
-      "description": "A WebDav URL or local path to replicate metadata annotations"
+    "max_memory": {
+      "type": "string",
+      "default": "12.GB"
+    },
+    "max_cpus": {
+      "type": "integer",
+      "default": 8
+    },
+    "max_time": {
+      "type": "string",
+      "default": "240.h"
+    },
+    "images": {
+      "type": "object",
+      "properties": {
+        "linux": { "type": "string" },
+        "panorama_client": { "type": "string" },
+        "proteowizard": { "type": "string" },
+        "batch_report": { "type": "string" }
+      },
+      "default": {
+        "linux": "quay.io/mauraisa/aws_bash:latest",
+        "panorama_client": "quay.io/protio/panorama-client:1.1.0",
+        "proteowizard": "proteowizard/pwiz-skyline-i-agree-to-the-vendor-licenses:3.0.24284-bc93c28",
+        "batch_report": "quay.io/mauraisa/dia_qc_report:2.5.0"
+      },
+      "additionalProperties": false,
+      "hidden": true
     }
   }
 }
