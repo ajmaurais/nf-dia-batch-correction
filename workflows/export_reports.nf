@@ -13,12 +13,6 @@ workflow export_reports {
         metadata_paths
         aws_secret_id
 
-    emit:
-        study_names
-        replicate_reports
-        precursor_reports
-        metadatas
-
     main:
         // get report templates
         if(params.replicate_report_template.startsWith(params.panorama.domain)) {
@@ -75,5 +69,11 @@ workflow export_reports {
         replicate_reports = all_reports.map{ it[1] }
         precursor_reports = all_reports.map{ it[2] }
         metadatas = all_reports.map{ it[3] }
+
+    emit:
+        study_names
+        replicate_reports
+        precursor_reports
+        metadatas
 }
 

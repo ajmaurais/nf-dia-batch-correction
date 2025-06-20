@@ -13,8 +13,8 @@ String setupPanoramaAPIKeySecret(secret_id, executor_type) {
     if(executor_type != 'awsbatch') {
         return ''
     } else {
-        SECRET_NAME = 'PANORAMA_API_KEY'
-        REGION = params.aws.region
+        def SECRET_NAME = 'PANORAMA_API_KEY'
+        def REGION = params.aws.region
 
         return """
             echo "Getting Panorama API key from AWS secrets manager..."
@@ -40,7 +40,7 @@ process PANORAMA_GET_PROJECT_FILE {
 
     script:
         file_name = file(file_path).name
-        
+
         """
         ${setupPanoramaAPIKeySecret(aws_secret_id, task.executor)}
 

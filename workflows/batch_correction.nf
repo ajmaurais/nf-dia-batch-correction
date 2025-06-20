@@ -11,12 +11,6 @@ workflow batch_correction {
         replicate_reports
         precursor_reports
 
-    emit:
-        normalized_db
-        bc_rmd
-        bc_html
-        bc_tsv_reports
-
     main:
 
         // Merge tsv reports into database and render rmd report
@@ -30,4 +24,10 @@ workflow batch_correction {
         bc_rmd = GENERATE_BATCH_RMD.out.bc_rmd
         bc_html = RENDER_BATCH_RMD.out.bc_html
         bc_tsv_reports = RENDER_BATCH_RMD.out.tsv_reports
+
+    emit:
+        normalized_db
+        bc_rmd
+        bc_html
+        bc_tsv_reports
 }

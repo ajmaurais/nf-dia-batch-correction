@@ -37,13 +37,13 @@ process SKYLINE_EXPORT_ANNOTATIONS {
     output:
         tuple val(study_name), path('*_annotations.csv'), emit: reports
 
-    shell:
-    '''
-    wine SkylineCmd --in="!{sky_file}" \
-        --exp-annotations="!{study_name}_annotations.csv" \
+    script:
+    """
+    wine SkylineCmd --in="${sky_file}" \
+        --exp-annotations="${study_name}_annotations.csv" \
         --exp-annotations-include-object=Replicate \
         > >(tee 'export_annotations.stdout') 2> >(tee 'export_annotations.stderr' >&2)
-    '''
+    """
 
     stub:
     """
@@ -68,23 +68,23 @@ process SKYLINE_EXPORT_REPORTS {
         path("*.stdout"), emit: stdout
         path("*.stderr"), emit: stderr
 
-    shell:
-    '''
+    script:
+    """
     # Write batch commands to file
-    echo "--in=\\"!{sky_file}\\"" | sed 's/\\\\//g' > batch_commands.bat
+    echo "--in=\\"${sky_file}\\"" | sed 's/\\\\//g' > batch_commands.bat
 
-    for report in !{replicate_report_template} !{precursor_report_template} ; do
-        echo "--report-add=\\"$report\\" --report-conflict-resolution=overwrite" | sed 's/\\\\//g' >> batch_commands.bat
+    for report in ${replicate_report_template} ${precursor_report_template} ; do
+        echo "--report-add=\\"\$report\\" --report-conflict-resolution=overwrite" | sed 's/\\\\//g' >> batch_commands.bat
     done
 
-    for name in '!{replicate_report_template.baseName}' '!{precursor_report_template.baseName}' ; do
-        echo "--report-format=tsv --report-invariant --report-name=\\"$name\\" --report-file=\\"!{study_name}_${name}.tsv\\"" | sed 's/\\\\//g' >> batch_commands.bat
+    for name in '${replicate_report_template.baseName}' '${precursor_report_template.baseName}' ; do
+        echo "--report-format=tsv --report-invariant --report-name=\\"\$name\\" --report-file=\\"${study_name}_\${name}.tsv\\"" | sed 's/\\\\//g' >> batch_commands.bat
     done
 
     # Export reports
     wine SkylineCmd --batch-commands='batch_commands.bat' \
         > >(tee 'export_reports.stdout') 2> >(tee 'export_reports.stderr' >&2)
-    '''
+    """
 
     stub:
     """

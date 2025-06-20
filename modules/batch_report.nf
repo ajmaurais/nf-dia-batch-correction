@@ -1,6 +1,6 @@
 
 def format_flag(var, flag) {
-    ret = (var == null ? "" : "${flag} ${var}")
+    def ret = (var == null ? "" : "${flag} ${var}")
     return ret
 }
 
@@ -129,27 +129,27 @@ process MERGE_REPORTS {
         path("*.stdout"), emit: stdout
         path("*.stderr"), emit: stderr
 
-    shell:
-        '''
-        study_names_array=( '!{study_names.join("' '")}' )
-        replicate_reports_array=( '!{replicate_reports.join("' '")}' )
-        precursor_reports_array=( '!{precursor_reports.join("' '")}' )
-        metadata_array=( '!{metadatas.join("' '")}' )
+    script:
+        """
+        study_names_array=( '${study_names.join("' '")}' )
+        replicate_reports_array=( '${replicate_reports.join("' '")}' )
+        precursor_reports_array=( '${precursor_reports.join("' '")}' )
+        metadata_array=( '${metadatas.join("' '")}' )
 
-        for i in ${!study_names_array[@]} ; do
-            echo "Working on ${study_names_array[$i]}..."
+        for i in \${!study_names_array[@]} ; do
+            echo "Working on \${study_names_array[\$i]}..."
 
             dia_qc parse --overwriteMode=append \
-                --projectName="${study_names_array[$i]}" \
-                --metadata="${metadata_array[$i]}" \
-                !{params.skyline.group_by_gene ? "--groupBy=gene" : ""} \
-                "${replicate_reports_array[$i]}" \
-                "${precursor_reports_array[$i]}" \
+                --projectName="\${study_names_array[\$i]}" \
+                --metadata="\${metadata_array[\$i]}" \
+                ${params.skyline.group_by_gene ? "--groupBy=gene" : ""} \
+                "\${replicate_reports_array[\$i]}" \
+                "\${precursor_reports_array[\$i]}" \
                 > >(tee -a "parse_data.stdout") 2> >(tee -a "parse_data.stderr" >&2)
 
             echo "Done!"
         done
-        '''
+        """
 
     stub:
         """
