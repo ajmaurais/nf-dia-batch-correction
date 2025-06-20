@@ -35,13 +35,13 @@ process FILTER_IMPUTE_NORMALIZE {
             > >(tee "filter_db.stdout") 2> >(tee "filter_db.stderr" >&2)
         fi
 
-        if ${params.imputation.imputation_method == null ? 'false' : 'true'} ; then
-            dia_qc impute -m=${params.imputation.imputation_method} ${batch_db} \
+        if ${params.imputation.method == null ? 'false' : 'true'} ; then
+            dia_qc impute ${format_flag(params.imputation.method, "-m")} ${batch_db} \
                 > >(tee "impute_db.stdout") 2> >(tee "impute_db.stderr" >&2)
         fi
 
         if ${params.normalize_db.method == null ? 'false' : 'true'} ; then
-            dia_qc normalize -m=${params.normalize_db.normalization_method} ${batch_db} \
+            dia_qc normalize ${format_flag(params.normalize_db.method, "-m")} ${batch_db} \
                 > >(tee "normalize_db.stdout") 2> >(tee "normalize_db.stderr" >&2)
         fi
         """
