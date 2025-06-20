@@ -2,6 +2,22 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
   "properties": {
+    "documents": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "skyline": {
+            "type": "string"
+          },
+          "metadata": {
+            "type": "string"
+          }
+        },
+        "required": ["skyline"]
+      },
+      "description": "A map of Skyline documents and metadata files; file paths can be local file paths or Panorama WebDav URLs"
+    },
     "result_dir": {
       "type": "string",
       "default": "results/dia_batch_correction",
@@ -86,7 +102,8 @@
       "properties": {
         "method": {
           "type": "string",
-          "enum" : ["knn"]
+          "enum" : ["knn"],
+          "description": "Method to use for imputation of missing precursor quantities. Choose from 'knn'."
         }
       }
     },
@@ -185,22 +202,6 @@
           }
         }
       }
-    },
-    "documents": {
-      "type": "object",
-      "additionalProperties": {
-        "type": "object",
-        "properties": {
-          "skyline": {
-            "type": "string"
-          },
-          "metadata": {
-            "type": "string"
-          }
-        },
-        "required": ["skyline"]
-      },
-      "description": "A map of Skyline documents and metadata files; file paths can be local file paths or Panorama WebDav URLs"
     },
     "max_memory": {
       "type": "string",
